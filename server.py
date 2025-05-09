@@ -1,6 +1,15 @@
+import json
+
 from geopy.geocoders import Nominatim
 from datetime import datetime
 from meteostat import Point, Daily
+import zmq
+
+context = zmq.Context()
+
+socket = context.socket(zmq.REP)
+
+socket.bind("tcp://*:5555")
 
 
 def get_lat_lon(location_name):
@@ -23,15 +32,35 @@ def get_data(lat, lon, start_day, start_month, start_year, end_day, end_month, e
     return data['tavg'].mean()
 
 
-# Example usage:
-address = input("Enter a location: ")
-lat, lon = get_lat_lon(address)
+while True:
+    # Receive and decode message
+    message = socket.recv_string()
+    print(f"Received request: {message}")
 
-if lat and lon:
-    print(f"Latitude: {lat}, Longitude: {lon}")
-else:
-    print("Location not found.")
+    # Parse JSON data
+    try:
+        data = json.loads(message)
+        address = data['address']
+        start_day = data['start_day']
+        start_month = data['start_month']
+        start_year = data['start_year']
+        end_day = data['end_day']
+        end_month = data['end_month']
+        end_year = data['end_year']
 
-data = get_data(lat, lon, start_day=1, start_month=1, start_year=2019, end_day=1, end_month=1, end_year=2023)
+        lat, lon = get_lat_lon(address)
+        if lat and lon:
+            avg_temp = get_data(lat, lon, start_day, start_month, start_year, end_day, end_month, end_year)
+            response = {
+                "status": "success",
+                "location": address,
+                "average_temperature": round(avg_temp)
+            }
+        else:
+            response = {"status": "error", "message": "Location not found"}
+    except Exception as e:
+        response = {"status": "error", "message": str(e)}
 
-print(f"5-Year Average Temperature: {data:.2f} °C")
+    # Send response back to client
+    socket.send_string(json.dumps(response))
+
