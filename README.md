@@ -33,3 +33,9 @@ Fail Example
 
 Example Call
 ![image](https://github.com/user-attachments/assets/59c4ab89-d16d-4c3f-a598-6711cc524605)
+
+
+UML Sequence Diagram:
+![image](https://github.com/user-attachments/assets/7123e39b-10a4-431f-98ce-c4fe973c6e3d)
+
+
