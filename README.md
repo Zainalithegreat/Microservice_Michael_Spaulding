@@ -1,5 +1,5 @@
-How to programmatically receive data from this microservice?
-Use ZeroMQ socket to send JSON string
+How to programmatically request data from this microservice?
+Use ZeroMQ REQ socket to send JSON string
 -  Address ("london, England)
 -  Start Day (1)
 -  Start Month (1)
@@ -9,6 +9,7 @@ Use ZeroMQ socket to send JSON string
 -  End Year (2023)
 
 For Example here we are going to request data
+
  ![image](https://github.com/user-attachments/assets/af541d0e-7a40-480b-8f51-cb8a48433725)
 
 Here we provide address(London, England), Start Day(1), Start Month(1), Start Year(2019), End Day(1), End Month (1), and End Year(2023). 
@@ -32,6 +33,7 @@ Fail Example
 ![image](https://github.com/user-attachments/assets/d0d2c6a6-46a8-48bc-baf2-e5905e941523)
 
 Example Call
+
 ![image](https://github.com/user-attachments/assets/59c4ab89-d16d-4c3f-a598-6711cc524605)
 
 
